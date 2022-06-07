@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(ggfortify)
+library(lubridate)
+
+bimodales_cun_c0 <- read_excel("E:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/cundinamarca/c0/bimodales_cun_c0.xlsx", 
+    sheet = "Hoja3")
+
+
+dec1=ts(bimodales_cun_c0$`med_81-90`,start = 1,frequency = 1)
+dec1
+
+dec2=ts(bimodales_cun_c0$`med_91-00`,start = 1,frequency = 1)
+dec2
+
+dec3=ts(bimodales_cun_c0$`med_01-10`,start = 1,frequency = 1)
+dec3
+
+dec4=ts(bimodales_cun_c0$`med_11-19`,start = 1,frequency = 1)
+dec4
+```
+```{r}
+plot_dec=autoplot(dec1)+xlab("mes")+ylab("Precipitacion [mm]")+ggtitle("Comportamiento PCP C1",subtitle = "Periodo 1981-2019")
+
+plot_dec
+plot_dec + geom_line(aes(y=dec1,colour="1981-1990"))  + geom_line(aes(y=dec2,colour="1991-2000"))+ geom_line(aes(y=dec3,colour="2001-2010"))+ geom_line(aes(y=dec4,colour="2011-2019"))+ scale_colour_manual("", values=c("1981-1990"="green4", "1991-2000"="yellow3", "2001-2010"="orange", "2011-2019"="red"))+ scale_x_continuous(breaks=seq(0, 12, 1)) +scale_x
+```
+

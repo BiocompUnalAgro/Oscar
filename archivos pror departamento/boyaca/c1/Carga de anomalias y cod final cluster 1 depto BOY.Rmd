@@ -1,0 +1,923 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+test<- read_excel("F:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/boyaca/C1/tmed_boy_C1.xlsx", 
+    sheet = "Hoja2")
+#View(tmed_ant_C2)
+#View(test[,2])
+m1=as.matrix(test[,2])
+data=matrix(m1,nrow=12,ncol=40)
+dat_t=t(data)
+tab_salida=data.frame(dat_t)
+
+#View(tab_salida)
+
+#write.csv(tab_salida,"tmed_mes_C2_boy.csv")
+```
+#carga de datos
+```{r}
+library(tidyverse)
+library(ggfortify)
+library(readxl)
+anom_tmed_C2 <- read_excel("F:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/boyaca/C1/tmed_boy_C1.xlsx", 
+    sheet = "Hoja3")
+View(tmed_ant_C2)
+anom_tmed_C2
+anomtmed_gral=as.matrix(anom_tmed_C2[,2:13])
+anomtmed_gral=t(anomtmed_gral)
+anomtmed_gral=matrix(anomtmed_gral,nrow = 480,ncol = 1)
+#anomtmed_gral=anomtmed_gral[-c(475:480)]
+
+
+# ENTRADA SERIES DE TIEMPO
+anomtmed_gral
+DeC2=anomtmed_gral[1:120]
+Dec2=anomtmed_gral[121:240]
+Dec3=anomtmed_gral[241:360]
+Dec4=anomtmed_gral[361:474]
+
+# ANUAL
+deC2_anual=anom_tmed_C2$ano_prom[1:10]
+dec2_anual=anom_tmed_C2$ano_prom[11:20]
+dec3_anual=anom_tmed_C2$ano_prom[1:30]
+dec4_anual=anom_tmed_C2$ano_prom[1:40]
+tot_anual=anom_tmed_C2$ano_prom
+
+```
+series de tiempo
+```{r}
+library(lubridate)
+
+anom_tmed_tot=ts(anomtmed_gral,start = 1981,frequency = 12)
+anom_tmed_deC2=ts(DeC2,start = 1981,frequency = 12)
+#anom_tmed_deC2
+anom_tmed_dec2=ts(Dec2,start = 1991,frequency = 12)
+#anom_tmed_dec2
+anom_tmed_dec3=ts(Dec3,start = 2001,frequency = 12)
+#anom_tmed_dec3
+anom_tmed_dec4=ts(Dec4,start = 2011,frequency = 12)
+#anom_tmed_dec4
+
+# ANUAL
+anom_tmed_deC2_anual=ts(deC2_anual,start = 1981,frequency = 1)
+#anom_tmed_deC2
+anom_tmed_dec2_anual=ts(dec2_anual,start = 1991,frequency = 1)
+#anom_tmed_dec2
+anom_tmed_dec3_anual=ts(dec3_anual,start = 2001,frequency = 1)
+#anom_tmed_dec3
+anom_tmed_dec4_anual=ts(dec4_anual,start = 2011,frequency = 1)
+#anom_tmed_dec4
+anom_tmed_tot_anual=ts(tot_anual,start = 1981,frequency = 1)
+
+
+
+
+
+```
+graficos
+```{r}
+ptot=autoplot(anom_tmed_tot)+xlab("Año")+ylab("Variacion en la temperatura media mensual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p1=autoplot(anom_tmed_deC2)+xlab("Año")+ylab("Variacion en la temperatura media mensual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p2=autoplot(anom_tmed_dec2)+xlab("Año")+ylab("Variacion en la temperatura media mensual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p3=autoplot(anom_tmed_dec3)+xlab("Año")+ylab("Variacion en la temperatura media mensual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p4=autoplot(anom_tmed_dec4)+xlab("Año")+ylab("Variacion en la temperatura media mensual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+#install.packages("ggExtra")
+ptot
+p1
+p2
+p3
+p4
+#ANUAL
+ptot_anual=autoplot(anom_tmed_tot_anual)+xlab("Año")+ylab("Variacion en la temperatura media anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá anual",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p1_anual=autoplot(anom_tmed_deC2_anual)+xlab("Año")+ylab("Variacion en la temperatura media anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá anual",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p2_anual=autoplot(anom_tmed_dec2_anual)+xlab("Año")+ylab("Variacion en la temperatura media anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá anual",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p3_anual=autoplot(anom_tmed_dec3_anual)+xlab("Año")+ylab("Variacion en la temperatura media anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá anual",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p4_anual=autoplot(anom_tmed_dec4_anual)+xlab("Año")+ylab("Variacion en la temperatura media anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá anual",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+#install.packages("ggExtra")
+ptot_anual
+p1_anual
+p2_anual
+p3_anual
+p4_anual
+
+
+```
+```{r}
+# POR MESES
+mes1_tot=anom_tmed_C2$enero
+mes1_deC2=anom_tmed_C2$enero[1:10]
+mes1_dec2=anom_tmed_C2$enero[11:20]
+mes1_dec3=anom_tmed_C2$enero[21:30]
+mes1_dec4=anom_tmed_C2$enero[31:40]
+
+# POR MESES
+mes1_tmed=ts(mes1_tot,start = 1981,frequency = 1)
+mes1_tmed_deC2=ts(mes1_deC2,start = 1981,frequency = 1)
+mes1_tmed_dec2=ts(mes1_dec2,start = 1991,frequency = 1)
+mes1_tmed_dec3=ts(mes1_dec3,start = 2001,frequency = 1)
+mes1_tmed_dec4=ts(mes1_dec4,start = 2011,frequency = 1)
+
+# POR MESES
+mes1_tmed_tot=autoplot(mes1_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Enero",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_tmed_d1=autoplot(mes1_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Enero",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_tmed_d2=autoplot(mes1_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Enero",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_tmed_d3=autoplot(mes1_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Enero",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_tmed_d4=autoplot(mes1_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Enero",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes1_tmed_tot
+mes1_tmed_d1
+mes1_tmed_d2
+mes1_tmed_d3
+mes1_tmed_d4
+
+# POR MESES
+mes2_tot=anom_tmed_C2$febrero
+mes2_deC2=anom_tmed_C2$febrero[1:10]
+mes2_dec2=anom_tmed_C2$febrero[11:20]
+mes2_dec3=anom_tmed_C2$febrero[21:30]
+mes2_dec4=anom_tmed_C2$febrero[31:40]
+
+
+mes2_tmed=ts(mes2_tot,start = 1981,frequency = 1)
+mes2_tmed_deC2=ts(mes2_deC2,start = 1981,frequency = 1)
+mes2_tmed_dec2=ts(mes2_dec2,start = 1991,frequency = 1)
+mes2_tmed_dec3=ts(mes2_dec3,start = 2001,frequency = 1)
+mes2_tmed_dec4=ts(mes2_dec4,start = 2011,frequency = 1)
+
+mes2_tmed_tot=autoplot(mes2_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_tmed_d1=autoplot(mes2_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_tmed_d2=autoplot(mes2_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_tmed_d3=autoplot(mes2_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Febrero",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_tmed_d4=autoplot(mes2_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Febrero",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes2_tmed_tot
+mes2_tmed_d1
+mes2_tmed_d2
+mes2_tmed_d3
+mes2_tmed_d4
+
+
+# POR MESES
+mes3_tot=anom_tmed_C2$marzo
+mes3_deC2=anom_tmed_C2$marzo[1:10]
+mes3_dec2=anom_tmed_C2$marzo[11:20]
+mes3_dec3=anom_tmed_C2$marzo[21:30]
+mes3_dec4=anom_tmed_C2$marzo[31:40]
+
+mes3_tmed=ts(mes3_tot,start = 1981,frequency = 1)
+mes3_tmed_deC2=ts(mes3_deC2,start = 1981,frequency = 1)
+mes3_tmed_dec2=ts(mes3_dec2,start = 1991,frequency = 1)
+mes3_tmed_dec3=ts(mes3_dec3,start = 2001,frequency = 1)
+mes3_tmed_dec4=ts(mes3_dec4,start = 2011,frequency = 1)
+
+mes3_tmed_tot=autoplot(mes3_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_tmed_d1=autoplot(mes3_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_tmed_d2=autoplot(mes3_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_tmed_d3=autoplot(mes3_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Marzo",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_tmed_d4=autoplot(mes3_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Marzo",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes3_tmed_tot
+mes3_tmed_d1
+mes3_tmed_d2
+mes3_tmed_d3
+mes3_tmed_d4
+
+# POR MESES
+mes4_tot=anom_tmed_C2$abril
+mes4_deC2=anom_tmed_C2$abril[1:10]
+mes4_dec2=anom_tmed_C2$abril[11:20]
+mes4_dec3=anom_tmed_C2$abril[21:30]
+mes4_dec4=anom_tmed_C2$abril[31:40]
+
+# POR MESES
+mes5_tot=anom_tmed_C2$mayo
+mes5_deC2=anom_tmed_C2$mayo[1:10]
+mes5_dec2=anom_tmed_C2$mayo[11:20]
+mes5_dec3=anom_tmed_C2$mayo[21:30]
+mes5_dec4=anom_tmed_C2$mayo[31:40]
+
+# POR MESES
+mes6_tot=anom_tmed_C2$junio
+mes6_deC2=anom_tmed_C2$junio[1:10]
+mes6_dec2=anom_tmed_C2$junio[11:20]
+mes6_dec3=anom_tmed_C2$junio[21:30]
+mes6_dec4=anom_tmed_C2$junio[31:40]
+
+# POR MESES
+mes7_tot=anom_tmed_C2$julio
+mes7_deC2=anom_tmed_C2$julio[1:10]
+mes7_dec2=anom_tmed_C2$julio[11:20]
+mes7_dec3=anom_tmed_C2$julio[21:30]
+mes7_dec4=anom_tmed_C2$julio[31:40]
+
+# POR MESES
+mes8_tot=anom_tmed_C2$agosto
+mes8_deC2=anom_tmed_C2$agosto[1:10]
+mes8_dec2=anom_tmed_C2$agosto[11:20]
+mes8_dec3=anom_tmed_C2$agosto[21:30]
+mes8_dec4=anom_tmed_C2$agosto[31:40]
+
+# POR MESES
+mes9_tot=anom_tmed_C2$septiembre
+mes9_deC2=anom_tmed_C2$septiembre[1:10]
+mes9_dec2=anom_tmed_C2$septiembre[11:20]
+mes9_dec3=anom_tmed_C2$septiembre[21:30]
+mes9_dec4=anom_tmed_C2$septiembre[31:40]
+
+# POR MESES
+mes10_tot=anom_tmed_C2$octubre
+mes10_deC2=anom_tmed_C2$octubre[1:10]
+mes10_dec2=anom_tmed_C2$octubre[11:20]
+mes10_dec3=anom_tmed_C2$octubre[21:30]
+mes10_dec4=anom_tmed_C2$octubre[31:40]
+
+# POR MESES
+mes11_tot=anom_tmed_C2$noviembre
+mes11_deC2=anom_tmed_C2$noviembre[1:10]
+mes11_dec2=anom_tmed_C2$noviembre[11:20]
+mes11_dec3=anom_tmed_C2$noviembre[21:30]
+mes11_dec4=anom_tmed_C2$noviembre[31:40]
+
+# POR MESES
+mes12_tot=anom_tmed_C2$diciembre
+mes12_deC2=anom_tmed_C2$diciembre[1:10]
+mes12_dec2=anom_tmed_C2$diciembre[11:20]
+mes12_dec3=anom_tmed_C2$diciembre[21:30]
+mes12_dec4=anom_tmed_C2$diciembre[31:40]
+
+
+mes4_tmed=ts(mes4_tot,start = 1981,frequency = 1)
+mes4_tmed_deC2=ts(mes4_deC2,start = 1981,frequency = 1)
+mes4_tmed_dec2=ts(mes4_dec2,start = 1991,frequency = 1)
+mes4_tmed_dec3=ts(mes4_dec3,start = 2001,frequency = 1)
+mes4_tmed_dec4=ts(mes4_dec4,start = 2011,frequency = 1)
+
+mes4_tmed_tot=autoplot(mes4_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Abril",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_tmed_d1=autoplot(mes4_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Abril",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_tmed_d2=autoplot(mes4_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Abril",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_tmed_d3=autoplot(mes4_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Abril",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_tmed_d4=autoplot(mes4_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Abril",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes4_tmed_tot
+mes4_tmed_d1
+mes4_tmed_d2
+mes4_tmed_d3
+mes4_tmed_d4
+
+mes5_tmed=ts(mes5_tot,start = 1981,frequency = 1)
+mes5_tmed_deC2=ts(mes5_deC2,start = 1981,frequency = 1)
+mes5_tmed_dec2=ts(mes5_dec2,start = 1991,frequency = 1)
+mes5_tmed_dec3=ts(mes5_dec3,start = 2001,frequency = 1)
+mes5_tmed_dec4=ts(mes5_dec4,start = 2011,frequency = 1)
+
+mes5_tmed_tot=autoplot(mes5_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_tmed_d1=autoplot(mes5_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_tmed_d2=autoplot(mes5_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_tmed_d3=autoplot(mes5_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Mayo",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_tmed_d4=autoplot(mes5_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Mayo",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes5_tmed_tot
+mes5_tmed_d1
+mes5_tmed_d2
+mes5_tmed_d3
+mes5_tmed_d4
+
+mes6_tmed=ts(mes6_tot,start = 1981,frequency = 1)
+mes6_tmed_deC2=ts(mes6_deC2,start = 1981,frequency = 1)
+mes6_tmed_dec2=ts(mes6_dec2,start = 1991,frequency = 1)
+mes6_tmed_dec3=ts(mes6_dec3,start = 2001,frequency = 1)
+mes6_tmed_dec4=ts(mes6_dec4,start = 2011,frequency = 1)
+
+mes6_tmed_tot=autoplot(mes6_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Junio",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_tmed_d1=autoplot(mes6_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Junio",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_tmed_d2=autoplot(mes6_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Junio",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_tmed_d3=autoplot(mes6_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Junio",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_tmed_d4=autoplot(mes6_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Junio",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes6_tmed_tot
+mes6_tmed_d1
+mes6_tmed_d2
+mes6_tmed_d3
+mes6_tmed_d4
+
+mes7_tmed=ts(mes7_tot,start = 1981,frequency = 1)
+mes7_tmed_deC2=ts(mes7_deC2,start = 1981,frequency = 1)
+mes7_tmed_dec2=ts(mes7_dec2,start = 1991,frequency = 1)
+mes7_tmed_dec3=ts(mes7_dec3,start = 2001,frequency = 1)
+mes7_tmed_dec4=ts(mes7_dec4,start = 2011,frequency = 1)
+
+mes7_tmed_tot=autoplot(mes7_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Julio",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_tmed_d1=autoplot(mes7_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Julio",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_tmed_d2=autoplot(mes7_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Julio",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_tmed_d3=autoplot(mes7_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Julio",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_tmed_d4=autoplot(mes7_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Julio",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes7_tmed_tot
+mes7_tmed_d1
+mes7_tmed_d2
+mes7_tmed_d3
+mes7_tmed_d4
+
+mes8_tmed=ts(mes8_tot,start = 1981,frequency = 1)
+mes8_tmed_deC2=ts(mes8_deC2,start = 1981,frequency = 1)
+mes8_tmed_dec2=ts(mes8_dec2,start = 1991,frequency = 1)
+mes8_tmed_dec3=ts(mes8_dec3,start = 2001,frequency = 1)
+mes8_tmed_dec4=ts(mes8_dec4,start = 2011,frequency = 1)
+
+mes8_tmed_tot=autoplot(mes8_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_tmed_d1=autoplot(mes8_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_tmed_d2=autoplot(mes8_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_tmed_d3=autoplot(mes8_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Agosto",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_tmed_d4=autoplot(mes8_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Agosto",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes8_tmed_tot
+mes8_tmed_d1
+mes8_tmed_d2
+mes8_tmed_d3
+mes8_tmed_d4
+
+mes9_tmed=ts(mes9_tot,start = 1981,frequency = 1)
+mes9_tmed_deC2=ts(mes9_deC2,start = 1981,frequency = 1)
+mes9_tmed_dec2=ts(mes9_dec2,start = 1991,frequency = 1)
+mes9_tmed_dec3=ts(mes9_dec3,start = 2001,frequency = 1)
+mes9_tmed_dec4=ts(mes9_dec4,start = 2011,frequency = 1)
+
+mes9_tmed_tot=autoplot(mes9_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_tmed_d1=autoplot(mes9_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_tmed_d2=autoplot(mes9_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_tmed_d3=autoplot(mes9_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_tmed_d4=autoplot(mes9_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes9_tmed_tot
+mes9_tmed_d1
+mes9_tmed_d2
+mes9_tmed_d3
+mes9_tmed_d4
+
+mes10_tmed=ts(mes10_tot,start = 1981,frequency = 1)
+mes10_tmed_deC2=ts(mes10_deC2,start = 1981,frequency = 1)
+mes10_tmed_dec2=ts(mes10_dec2,start = 1991,frequency = 1)
+mes10_tmed_dec3=ts(mes10_dec3,start = 2001,frequency = 1)
+mes10_tmed_dec4=ts(mes10_dec4,start = 2011,frequency = 1)
+
+mes10_tmed_tot=autoplot(mes10_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_tmed_d1=autoplot(mes10_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_tmed_d2=autoplot(mes10_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_tmed_d3=autoplot(mes10_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Octubre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_tmed_d4=autoplot(mes10_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Octubre",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes10_tmed_tot
+mes10_tmed_d1
+mes10_tmed_d2
+mes10_tmed_d3
+mes10_tmed_d4
+
+mes11_tmed=ts(mes11_tot,start = 1981,frequency = 1)
+mes11_tmed_deC2=ts(mes11_deC2,start = 1981,frequency = 1)
+mes11_tmed_dec2=ts(mes11_dec2,start = 1991,frequency = 1)
+mes11_tmed_dec3=ts(mes11_dec3,start = 2001,frequency = 1)
+mes11_tmed_dec4=ts(mes11_dec4,start = 2011,frequency = 1)
+
+mes11_tmed_tot=autoplot(mes11_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_tmed_d1=autoplot(mes11_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_tmed_d2=autoplot(mes11_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_tmed_d3=autoplot(mes11_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_tmed_d4=autoplot(mes11_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes11_tmed_tot
+mes11_tmed_d1
+mes11_tmed_d2
+mes11_tmed_d3
+mes11_tmed_d4
+
+mes12_tmed=ts(mes12_tot,start = 1981,frequency = 1)
+mes12_tmed_deC2=ts(mes12_deC2,start = 1981,frequency = 1)
+mes12_tmed_dec2=ts(mes12_dec2,start = 1991,frequency = 1)
+mes12_tmed_dec3=ts(mes12_dec3,start = 2001,frequency = 1)
+mes12_tmed_dec4=ts(mes12_dec4,start = 2011,frequency = 1)
+
+mes12_tmed_tot=autoplot(mes12_tmed)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1981-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_tmed_d1=autoplot(mes12_tmed_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_tmed_d2=autoplot(mes12_tmed_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_tmed_d3=autoplot(mes12_tmed_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_tmed_d4=autoplot(mes12_tmed_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Temperatura media C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 2011-2020")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes12_tmed_tot
+mes12_tmed_d1
+mes12_tmed_d2
+mes12_tmed_d3
+mes12_tmed_d4
+
+```
+
+PCP
+```{r}
+test2<- read_excel("F:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/boyaca/C1/PCP_boy_C1.xlsx", 
+    sheet = "Hoja2")
+#View(test[,2])
+m12=as.matrix(test2[,2])
+data2=matrix(m12,nrow=12,ncol=40)
+dat_t2=t(data2)
+tab_salida2=data.frame(dat_t2)
+
+#View(tab_salida)
+
+#write.csv(tab_salida2,"PCP_mes_C2_boy.csv")
+```
+
+
+
+```{r}
+anom_PCP_C2 <- read_excel("F:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/boyaca/C1/PCP_boy_C1.xlsx", 
+    sheet = "Hoja3")
+anom_PCP_C2
+anomPCP_gral=as.matrix(anom_PCP_C2[,2:13])
+anomPCP_gral=t(anomPCP_gral)
+anomPCP_gral=matrix(anomPCP_gral,nrow = 480,ncol = 1)
+#anomtmed_gral=anomtmed_gral[-c(475:480)]
+
+
+# ENTRADA SERIES DE TIEMPO
+tot_PCP=anomPCP_gral
+deC2_PCP=anomPCP_gral[1:120]
+dec2_PCP=anomPCP_gral[121:240]
+dec3_PCP=anomPCP_gral[241:360]
+dec4_PCP=anomPCP_gral[361:474]
+
+# ANUAL
+deC2_PCP_anual=anom_PCP_C2$ano_prom[1:10]
+dec2_PCP_anual=anom_PCP_C2$ano_prom[11:20]
+dec3_PCP_anual=anom_PCP_C2$ano_prom[1:30]
+dec4_PCP_anual=anom_PCP_C2$ano_prom[1:40]
+tot_PCP_anual=anom_PCP_C2$ano_prom
+
+```
+
+series de tiempo
+```{r}
+anom_PCP_deC2=ts(deC2_PCP,start = 1981,frequency = 12)
+#anom_tmed_deC2
+anom_PCP_dec2=ts(dec2_PCP,start = 1991,frequency = 12)
+#anom_tmed_dec2
+anom_PCP_dec3=ts(dec3_PCP,start = 2001,frequency = 12)
+#anom_tmed_dec3
+anom_PCP_dec4=ts(dec4_PCP,start = 2011,frequency = 12)
+#anom_tmed_dec4
+anom_PCP_tot=ts(tot_PCP,start = 1981,frequency = 12)
+
+## ANUAL
+anom_PCP_anual_deC2=ts(deC2_PCP_anual,start = 1981,frequency = 1)
+#anom_tmed_deC2
+anom_PCP_anual_dec2=ts(dec2_PCP_anual,start = 1991,frequency = 1)
+#anom_tmed_dec2
+anom_PCP_anual_dec3=ts(dec3_PCP_anual,start = 2001,frequency = 1)
+#anom_tmed_dec3
+anom_PCP_anual_dec4=ts(dec4_PCP_anual,start = 2011,frequency = 1)
+#anom_tmed_dec4
+anom_PCP_anual_tot=ts(tot_PCP_anual,start = 1981,frequency = 1)
+```
+Graficos
+```{r}
+ptot_PCP=autoplot(anom_PCP_tot)+xlab("Año")+ylab("Variacion en la precipitacion mensual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p1_PCP=autoplot(anom_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion mensual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p2_PCP=autoplot(anom_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion mensual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p3_PCP=autoplot(anom_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion mensual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p4_PCP=autoplot(anom_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion mensual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+#install.packages("ggExtra")
+ptot_PCP
+p1_PCP
+p2_PCP
+p3_PCP
+p4_PCP
+
+#ANUAL
+ptot_PCP_anual=autoplot(anom_PCP_anual_tot)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá anual",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p1_PCP_anual=autoplot(anom_PCP_anual_deC2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá anual",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p2_PCP_anual=autoplot(anom_PCP_anual_dec2)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá anual",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p3_PCP_anual=autoplot(anom_PCP_anual_dec3)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá anual",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+p4_PCP_anual=autoplot(anom_PCP_anual_dec4)+xlab("Año")+ylab("Variacion en la precipitacion anual")+ggtitle("Anomalias de Precipitacion C2 - Boyacá anual",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+#install.packages("ggExtra")
+ptot_PCP_anual
+p1_PCP_anual
+p2_PCP_anual
+p3_PCP_anual
+p4_PCP_anual
+
+```
+```{r}
+# por meses
+
+mes1_tot_PCP=anom_PCP_C2$enero
+mes1_deC2_PCP=anom_PCP_C2$enero[1:10]
+mes1_dec2_PCP=anom_PCP_C2$enero[11:20]
+mes1_dec3_PCP=anom_PCP_C2$enero[21:30]
+mes1_dec4_PCP=anom_PCP_C2$enero[31:40]
+
+mes2_tot_PCP=anom_PCP_C2$febrero
+mes2_deC2_PCP=anom_PCP_C2$febrero[1:10]
+mes2_dec2_PCP=anom_PCP_C2$febrero[11:20]
+mes2_dec3_PCP=anom_PCP_C2$febrero[21:30]
+mes2_dec4_PCP=anom_PCP_C2$febrero[31:40]
+
+mes3_tot_PCP=anom_PCP_C2$marzo
+mes3_deC2_PCP=anom_PCP_C2$marzo[1:10]
+mes3_dec2_PCP=anom_PCP_C2$marzo[11:20]
+mes3_dec3_PCP=anom_PCP_C2$marzo[21:30]
+mes3_dec4_PCP=anom_PCP_C2$marzo[31:40]
+
+mes4_tot_PCP=anom_PCP_C2$abril
+mes4_deC2_PCP=anom_PCP_C2$abril[1:10]
+mes4_dec2_PCP=anom_PCP_C2$abril[11:20]
+mes4_dec3_PCP=anom_PCP_C2$abril[21:30]
+mes4_dec4_PCP=anom_PCP_C2$abril[31:40]
+
+mes5_tot_PCP=anom_PCP_C2$mayo
+mes5_deC2_PCP=anom_PCP_C2$mayo[1:10]
+mes5_dec2_PCP=anom_PCP_C2$mayo[11:20]
+mes5_dec3_PCP=anom_PCP_C2$mayo[21:30]
+mes5_dec4_PCP=anom_PCP_C2$mayo[31:40]
+
+mes6_tot_PCP=anom_PCP_C2$junio
+mes6_deC2_PCP=anom_PCP_C2$junio[1:10]
+mes6_dec2_PCP=anom_PCP_C2$junio[11:20]
+mes6_dec3_PCP=anom_PCP_C2$junio[21:30]
+mes6_dec4_PCP=anom_PCP_C2$junio[31:40]
+
+mes7_tot_PCP=anom_PCP_C2$julio
+mes7_deC2_PCP=anom_PCP_C2$julio[1:10]
+mes7_dec2_PCP=anom_PCP_C2$julio[11:20]
+mes7_dec3_PCP=anom_PCP_C2$julio[21:30]
+mes7_dec4_PCP=anom_PCP_C2$julio[31:40]
+
+mes8_tot_PCP=anom_PCP_C2$agosto
+mes8_deC2_PCP=anom_PCP_C2$agosto[1:10]
+mes8_dec2_PCP=anom_PCP_C2$agosto[11:20]
+mes8_dec3_PCP=anom_PCP_C2$agosto[21:30]
+mes8_dec4_PCP=anom_PCP_C2$agosto[31:40]
+
+mes9_tot_PCP=anom_PCP_C2$septiembre
+mes9_deC2_PCP=anom_PCP_C2$septiembre[1:10]
+mes9_dec2_PCP=anom_PCP_C2$septiembre[11:20]
+mes9_dec3_PCP=anom_PCP_C2$septiembre[21:30]
+mes9_dec4_PCP=anom_PCP_C2$septiembre[31:40]
+
+mes10_tot_PCP=anom_PCP_C2$octubre
+mes10_deC2_PCP=anom_PCP_C2$octubre[1:10]
+mes10_dec2_PCP=anom_PCP_C2$octubre[11:20]
+mes10_dec3_PCP=anom_PCP_C2$octubre[21:30]
+mes10_dec4_PCP=anom_PCP_C2$octubre[31:40]
+
+mes11_tot_PCP=anom_PCP_C2$noviembre
+mes11_deC2_PCP=anom_PCP_C2$noviembre[1:10]
+mes11_dec2_PCP=anom_PCP_C2$noviembre[11:20]
+mes11_dec3_PCP=anom_PCP_C2$noviembre[21:30]
+mes11_dec4_PCP=anom_PCP_C2$noviembre[31:40]
+
+mes12_tot_PCP=anom_PCP_C2$octubre
+mes12_deC2_PCP=anom_PCP_C2$octubre[1:10]
+mes12_dec2_PCP=anom_PCP_C2$octubre[11:20]
+mes12_dec3_PCP=anom_PCP_C2$octubre[21:30]
+mes12_dec4_PCP=anom_PCP_C2$octubre[31:40]
+
+# series de tiempo y graficos
+mes1_PCP=ts(mes1_tot_PCP,start = 1981,frequency = 1)
+mes1_PCP_deC2=ts(mes1_deC2_PCP,start = 1981,frequency = 1)
+mes1_PCP_dec2=ts(mes1_dec2_PCP,start = 1991,frequency = 1)
+mes1_PCP_dec3=ts(mes1_dec3_PCP,start = 2001,frequency = 1)
+mes1_PCP_dec4=ts(mes1_dec4_PCP,start = 2011,frequency = 1)
+
+mes2_PCP=ts(mes2_tot_PCP,start = 1981,frequency = 1)
+mes2_PCP_deC2=ts(mes2_deC2_PCP,start = 1981,frequency = 1)
+mes2_PCP_dec2=ts(mes2_dec2_PCP,start = 1991,frequency = 1)
+mes2_PCP_dec3=ts(mes2_dec3_PCP,start = 2001,frequency = 1)
+mes2_PCP_dec4=ts(mes2_dec4_PCP,start = 2011,frequency = 1)
+
+mes2_PCP=ts(mes2_tot_PCP,start = 1981,frequency = 1)
+mes2_PCP_deC2=ts(mes2_deC2_PCP,start = 1981,frequency = 1)
+mes2_PCP_dec2=ts(mes2_dec2_PCP,start = 1991,frequency = 1)
+mes2_PCP_dec3=ts(mes2_dec3_PCP,start = 2001,frequency = 1)
+mes2_PCP_dec4=ts(mes2_dec4_PCP,start = 2011,frequency = 1)
+
+mes3_PCP=ts(mes3_tot_PCP,start = 1981,frequency = 1)
+mes3_PCP_deC2=ts(mes3_deC2_PCP,start = 1981,frequency = 1)
+mes3_PCP_dec2=ts(mes3_dec2_PCP,start = 1991,frequency = 1)
+mes3_PCP_dec3=ts(mes3_dec3_PCP,start = 2001,frequency = 1)
+mes3_PCP_dec4=ts(mes3_dec4_PCP,start = 2011,frequency = 1)
+
+mes4_PCP=ts(mes4_tot_PCP,start = 1981,frequency = 1)
+mes4_PCP_deC2=ts(mes4_deC2_PCP,start = 1981,frequency = 1)
+mes4_PCP_dec2=ts(mes4_dec2_PCP,start = 1991,frequency = 1)
+mes4_PCP_dec3=ts(mes4_dec3_PCP,start = 2001,frequency = 1)
+mes4_PCP_dec4=ts(mes4_dec4_PCP,start = 2011,frequency = 1)
+
+mes5_PCP=ts(mes5_tot_PCP,start = 1981,frequency = 1)
+mes5_PCP_deC2=ts(mes5_deC2_PCP,start = 1981,frequency = 1)
+mes5_PCP_dec2=ts(mes5_dec2_PCP,start = 1991,frequency = 1)
+mes5_PCP_dec3=ts(mes5_dec3_PCP,start = 2001,frequency = 1)
+mes5_PCP_dec4=ts(mes5_dec4_PCP,start = 2011,frequency = 1)
+
+mes6_PCP=ts(mes6_tot_PCP,start = 1981,frequency = 1)
+mes6_PCP_deC2=ts(mes6_deC2_PCP,start = 1981,frequency = 1)
+mes6_PCP_dec2=ts(mes6_dec2_PCP,start = 1991,frequency = 1)
+mes6_PCP_dec3=ts(mes6_dec3_PCP,start = 2001,frequency = 1)
+mes6_PCP_dec4=ts(mes6_dec4_PCP,start = 2011,frequency = 1)
+
+mes7_PCP=ts(mes7_tot_PCP,start = 1981,frequency = 1)
+mes7_PCP_deC2=ts(mes7_deC2_PCP,start = 1981,frequency = 1)
+mes7_PCP_dec2=ts(mes7_dec2_PCP,start = 1991,frequency = 1)
+mes7_PCP_dec3=ts(mes7_dec3_PCP,start = 2001,frequency = 1)
+mes7_PCP_dec4=ts(mes7_dec4_PCP,start = 2011,frequency = 1)
+
+mes8_PCP=ts(mes8_tot_PCP,start = 1981,frequency = 1)
+mes8_PCP_deC2=ts(mes8_deC2_PCP,start = 1981,frequency = 1)
+mes8_PCP_dec2=ts(mes8_dec2_PCP,start = 1991,frequency = 1)
+mes8_PCP_dec3=ts(mes8_dec3_PCP,start = 2001,frequency = 1)
+mes8_PCP_dec4=ts(mes8_dec4_PCP,start = 2011,frequency = 1)
+
+mes9_PCP=ts(mes9_tot_PCP,start = 1981,frequency = 1)
+mes9_PCP_deC2=ts(mes9_deC2_PCP,start = 1981,frequency = 1)
+mes9_PCP_dec2=ts(mes9_dec2_PCP,start = 1991,frequency = 1)
+mes9_PCP_dec3=ts(mes9_dec3_PCP,start = 2001,frequency = 1)
+mes9_PCP_dec4=ts(mes9_dec4_PCP,start = 2011,frequency = 1)
+
+mes10_PCP=ts(mes10_tot_PCP,start = 1981,frequency = 1)
+mes10_PCP_deC2=ts(mes10_deC2_PCP,start = 1981,frequency = 1)
+mes10_PCP_dec2=ts(mes10_dec2_PCP,start = 1991,frequency = 1)
+mes10_PCP_dec3=ts(mes10_dec3_PCP,start = 2001,frequency = 1)
+mes10_PCP_dec4=ts(mes10_dec4_PCP,start = 2011,frequency = 1)
+
+mes11_PCP=ts(mes11_tot_PCP,start = 1981,frequency = 1)
+mes11_PCP_deC2=ts(mes11_deC2_PCP,start = 1981,frequency = 1)
+mes11_PCP_dec2=ts(mes11_dec2_PCP,start = 1991,frequency = 1)
+mes11_PCP_dec3=ts(mes11_dec3_PCP,start = 2001,frequency = 1)
+mes11_PCP_dec4=ts(mes11_dec4_PCP,start = 2011,frequency = 1)
+
+mes12_PCP=ts(mes12_tot_PCP,start = 1981,frequency = 1)
+mes12_PCP_deC2=ts(mes12_deC2_PCP,start = 1981,frequency = 1)
+mes12_PCP_dec2=ts(mes12_dec2_PCP,start = 1991,frequency = 1)
+mes12_PCP_dec3=ts(mes12_dec3_PCP,start = 2001,frequency = 1)
+mes12_PCP_dec4=ts(mes12_dec4_PCP,start = 2011,frequency = 1)
+
+mes1_PCP_tot=autoplot(mes1_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Enero",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_PCP_d1=autoplot(mes1_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Enero",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_PCP_d2=autoplot(mes1_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Enero",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_PCP_d3=autoplot(mes1_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Enero",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes1_PCP_d4=autoplot(mes1_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Enero",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes1_PCP_tot
+mes1_PCP_d1
+mes1_PCP_d2
+mes1_PCP_d3
+mes1_PCP_d4
+
+mes2_PCP_tot=autoplot(mes2_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_PCP_d1=autoplot(mes2_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_PCP_d2=autoplot(mes2_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Febrero",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_PCP_d3=autoplot(mes2_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Febrero",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes2_PCP_d4=autoplot(mes2_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Febrero",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes2_PCP_tot
+mes2_PCP_d1
+mes2_PCP_d2
+mes2_PCP_d3
+mes2_PCP_d4
+
+mes3_PCP_tot=autoplot(mes3_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_PCP_d1=autoplot(mes3_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_PCP_d2=autoplot(mes3_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Marzo",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_PCP_d3=autoplot(mes3_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Marzo",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes3_PCP_d4=autoplot(mes3_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Marzo",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes3_PCP_tot
+mes3_PCP_d1
+mes3_PCP_d2
+mes3_PCP_d3
+mes3_PCP_d4
+
+mes4_PCP_tot=autoplot(mes4_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Abril",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_PCP_d1=autoplot(mes4_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Abril",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_PCP_d2=autoplot(mes4_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Abril",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_PCP_d3=autoplot(mes4_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Abril",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes4_PCP_d4=autoplot(mes4_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Abril",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes4_PCP_tot
+mes4_PCP_d1
+mes4_PCP_d2
+mes4_PCP_d3
+mes4_PCP_d4
+
+mes5_PCP_tot=autoplot(mes5_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_PCP_d1=autoplot(mes5_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_PCP_d2=autoplot(mes5_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Mayo",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_PCP_d3=autoplot(mes5_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Mayo",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes5_PCP_d4=autoplot(mes5_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Mayo",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes5_PCP_tot
+mes5_PCP_d1
+mes5_PCP_d2
+mes5_PCP_d3
+mes5_PCP_d4
+
+mes6_PCP_tot=autoplot(mes6_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Junio",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_PCP_d1=autoplot(mes6_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Junio",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_PCP_d2=autoplot(mes6_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Junio",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_PCP_d3=autoplot(mes6_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Junio",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes6_PCP_d4=autoplot(mes6_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Junio",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes6_PCP_tot
+mes6_PCP_d1
+mes6_PCP_d2
+mes6_PCP_d3
+mes6_PCP_d4
+
+mes7_PCP_tot=autoplot(mes7_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Julio",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_PCP_d1=autoplot(mes7_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Julio",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_PCP_d2=autoplot(mes7_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Julio",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_PCP_d3=autoplot(mes7_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Julio",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes7_PCP_d4=autoplot(mes7_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Julio",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes7_PCP_tot
+mes7_PCP_d1
+mes7_PCP_d2
+mes7_PCP_d3
+mes7_PCP_d4
+
+mes8_PCP_tot=autoplot(mes8_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_PCP_d1=autoplot(mes8_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_PCP_d2=autoplot(mes8_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Agosto",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_PCP_d3=autoplot(mes8_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Agosto",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes8_PCP_d4=autoplot(mes8_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Agosto",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes8_PCP_tot
+mes8_PCP_d1
+mes8_PCP_d2
+mes8_PCP_d3
+mes8_PCP_d4
+
+mes9_PCP_tot=autoplot(mes9_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_PCP_d1=autoplot(mes9_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_PCP_d2=autoplot(mes9_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_PCP_d3=autoplot(mes9_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes9_PCP_d4=autoplot(mes9_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Septiembre",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes9_PCP_tot
+mes9_PCP_d1
+mes9_PCP_d2
+mes9_PCP_d3
+mes9_PCP_d4
+
+mes10_PCP_tot=autoplot(mes10_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_PCP_d1=autoplot(mes10_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_PCP_d2=autoplot(mes10_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Octubre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_PCP_d3=autoplot(mes10_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Octubre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes10_PCP_d4=autoplot(mes10_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Octubre",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes10_PCP_tot
+mes10_PCP_d1
+mes10_PCP_d2
+mes10_PCP_d3
+mes10_PCP_d4
+
+mes11_PCP_tot=autoplot(mes11_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_PCP_d1=autoplot(mes11_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_PCP_d2=autoplot(mes11_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_PCP_d3=autoplot(mes11_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes11_PCP_d4=autoplot(mes11_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Noviembre",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes11_PCP_tot
+mes11_PCP_d1
+mes11_PCP_d2
+mes11_PCP_d3
+mes11_PCP_d4
+
+mes12_PCP_tot=autoplot(mes12_PCP)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1981-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_PCP_d1=autoplot(mes12_PCP_deC2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1981-1990")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_PCP_d2=autoplot(mes12_PCP_dec2)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 1991-2000")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_PCP_d3=autoplot(mes12_PCP_dec3)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 2001-2010")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+mes12_PCP_d4=autoplot(mes12_PCP_dec4)+xlab("Año")+ylab("Variacion en la precipitacion")+ggtitle("Anomalias de Precipitacion C2 - Boyacá del mes: Diciembre",subtitle = "Periodo 2011-2019")+geom_hline(yintercept = 0, linetype="dashed", color="red")
+
+mes12_PCP_tot
+mes12_PCP_d1
+mes12_PCP_d2
+mes12_PCP_d3
+mes12_PCP_d4
+
+
+```
+
+
+
+
+```{r}
+library(zoo) 
+library(dplyr)
+
+mmovil_tmed=rollmean(anom_tmed_tot, k = 5 , fill = NA, align = "right")
+#mmovil_tmed
+ptot + geom_line(aes(y=anom_tmed_tot,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_anual=rollmean(anom_tmed_tot_anual, k = 3 , fill = NA, align = "right")
+ptot_anual + geom_line(aes(y=anom_tmed_tot_anual,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_anual,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_01=rollmean(mes1_tmed, k = 3 , fill = NA, align = "right")
+mes1_tmed_tot + geom_line(aes(y=mes1_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_01,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_02=rollmean(mes2_tmed, k = 3 , fill = NA, align = "right")
+mes2_tmed_tot + geom_line(aes(y=mes2_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_02,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_03=rollmean(mes3_tmed, k = 3 , fill = NA, align = "right")
+mes3_tmed_tot + geom_line(aes(y=mes3_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_03,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_04=rollmean(mes4_tmed, k = 3 , fill = NA, align = "right")
+mes4_tmed_tot + geom_line(aes(y=mes4_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_04,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_05=rollmean(mes5_tmed, k = 3 , fill = NA, align = "right")
+mes5_tmed_tot + geom_line(aes(y=mes5_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_05,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_06=rollmean(mes6_tmed, k = 3 , fill = NA, align = "right")
+mes6_tmed_tot + geom_line(aes(y=mes6_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_06,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_07=rollmean(mes7_tmed, k = 3 , fill = NA, align = "right")
+mes7_tmed_tot + geom_line(aes(y=mes7_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_07,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_08=rollmean(mes8_tmed, k = 3 , fill = NA, align = "right")
+mes8_tmed_tot + geom_line(aes(y=mes8_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_08,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_09=rollmean(mes9_tmed, k = 3 , fill = NA, align = "right")
+mes9_tmed_tot + geom_line(aes(y=mes9_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_09,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_10=rollmean(mes10_tmed, k = 3 , fill = NA, align = "right")
+mes10_tmed_tot + geom_line(aes(y=mes10_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_10,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_11=rollmean(mes11_tmed, k = 3 , fill = NA, align = "right")
+mes11_tmed_tot + geom_line(aes(y=mes11_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_11,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+mmovil_tmed_12=rollmean(mes12_tmed, k = 3 , fill = NA, align = "right")
+mes12_tmed_tot + geom_line(aes(y=mes12_tmed,colour="Anomalias"))  + geom_line(aes(y=mmovil_tmed_12,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+
+```
+# media movil PCP
+```{r}
+mmovil_PCP=rollmean(anom_PCP_tot, k = 5 , fill = NA, align = "right")
+ptot_PCP + geom_line(aes(y=anom_PCP_tot,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_anual=rollmean(anom_PCP_anual_tot, k = 3 , fill = NA, align = "right")
+ptot_PCP_anual + geom_line(aes(y=anom_PCP_anual_tot,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_anual,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_01=rollmean(mes1_PCP, k = 3 , fill = NA, align = "right")
+mes1_PCP_tot + geom_line(aes(y=mes1_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_01,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_02=rollmean(mes2_PCP, k = 3 , fill = NA, align = "right")
+mes2_PCP_tot + geom_line(aes(y=mes2_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_02,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_03=rollmean(mes3_PCP, k = 3 , fill = NA, align = "right")
+mes3_PCP_tot + geom_line(aes(y=mes3_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_03,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_04=rollmean(mes4_PCP, k = 3 , fill = NA, align = "right")
+mes4_PCP_tot + geom_line(aes(y=mes4_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_04,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_05=rollmean(mes5_PCP, k = 3 , fill = NA, align = "right")
+mes5_PCP_tot + geom_line(aes(y=mes5_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_05,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_06=rollmean(mes6_PCP, k = 3 , fill = NA, align = "right")
+mes6_PCP_tot + geom_line(aes(y=mes6_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_06,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_07=rollmean(mes7_PCP, k = 3 , fill = NA, align = "right")
+mes7_PCP_tot + geom_line(aes(y=mes7_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_07,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_08=rollmean(mes8_PCP, k = 3 , fill = NA, align = "right")
+mes8_PCP_tot + geom_line(aes(y=mes8_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_08,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_09=rollmean(mes9_PCP, k = 3 , fill = NA, align = "right")
+mes9_PCP_tot + geom_line(aes(y=mes9_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_09,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_10=rollmean(mes10_PCP, k = 3 , fill = NA, align = "right")
+mes10_PCP_tot + geom_line(aes(y=mes10_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_10,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_11=rollmean(mes11_PCP, k = 3 , fill = NA, align = "right")
+mes11_PCP_tot + geom_line(aes(y=mes11_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_11,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+
+mmovil_PCP_12=rollmean(mes12_PCP, k = 3 , fill = NA, align = "right")
+mes12_PCP_tot + geom_line(aes(y=mes12_PCP,colour="Anomalias"))  + geom_line(aes(y=mmovil_PCP_12,colour="Media movil"))+ scale_colour_manual("", values=c("Anomalias"="black", "Media movil"="magenta1"))
+```
+
+
+

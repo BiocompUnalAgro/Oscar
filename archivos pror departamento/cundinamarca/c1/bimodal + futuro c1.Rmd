@@ -1,0 +1,188 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(ggfortify)
+library(lubridate)
+
+bimodales_cun_c1 <- read_excel("E:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/cundinamarca/c1/bimodales_cun_c1.xlsx", 
+    sheet = "Hoja3")
+
+
+dec1=ts(bimodales_cun_c1$`med_81-90`,start = 1,frequency = 1)
+dec1
+
+dec2=ts(bimodales_cun_c1$`med_91-00`,start = 1,frequency = 1)
+dec2
+
+dec3=ts(bimodales_cun_c1$`med_01-10`,start = 1,frequency = 1)
+dec3
+
+dec4=ts(bimodales_cun_c1$`med_11-19`,start = 1,frequency = 1)
+dec4
+```
+```{r}
+plot_dec=autoplot(dec1)+xlab("mes")+ylab("Precipitacion [mm]")+ggtitle("Comportamiento PCP C2",subtitle = "Periodo 1981-2019")
+
+plot_dec
+plot_dec + geom_line(aes(y=dec1,colour="1981-1990"))  + geom_line(aes(y=dec2,colour="1991-2000"))+ geom_line(aes(y=dec3,colour="2001-2010"))+ geom_line(aes(y=dec4,colour="2011-2019"))+ scale_colour_manual("", values=c("1981-1990"="green4", "1991-2000"="yellow3", "2001-2010"="orange", "2011-2019"="red"))+ scale_x_continuous(breaks=seq(0, 12, 1))
+```
+
+
+
+
+```{r}
+library(readxl)
+
+
+
+test_PCP<- read_excel("E:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/cundinamarca/C1/PCP_cun_C1.xlsx", 
+    sheet = "Hoja2")
+test_PCP
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(ggfortify)
+library(forecast)
+
+
+
+
+
+
+PCP.ts=ts(test_PCP$...2,start = 1981,frequency = 12)
+
+
+
+?forecast
+
+arima_PCP<-auto.arima(PCP.ts,stationary = FALSE, seasonal.test = NULL,allowdrift = TRUE,allowmean = TRUE,lambda = "auto",biasadj = TRUE)
+arima_PCP
+forecast_PCP<-forecast(arima_PCP,level = c(95), h = 60,find.frequency=TRUE,allow.multiplicative.trend=TRUE,biasadj = TRUE)
+
+
+
+pred_PCP_C2=autoplot(forecast_PCP)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca",subtitle = "Periodo 1981-2025")
+
+
+pred_PCP_C2
+
+```
+
+
+
+```{r}
+año=c(2021:2025)
+meses=c("año","enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre")
+
+PCP_fut=matrix(forecast_PCP$mean)
+PCP_fut=matrix(PCP_fut,12,5)
+PCP_fut=data.frame(año,t(PCP_fut))
+names(PCP_fut)=meses
+PCP_fut
+
+#write.csv(tmed_fut,"tmed_fut_C2_cun.csv")
+#write.csv(PCP_fut,"PCP_fut_C2_cun.csv")
+```
+
+bimodal + futuro
+
+```{r}
+PCP_fut[-1]
+PCP_media_fut=colMeans(PCP_fut[-1])
+PCP_media_fut
+PCP_media_fut=as.vector(PCP_media_fut)
+PCP_media_fut
+
+fut_PCP=ts(PCP_media_fut,start = 1,frequency = 1)
+fut_PCP
+
+
+plot_dec2=autoplot(dec1)+xlab("mes")+ylab("Precipitacion [mm]")+ggtitle("Comportamiento PCP C2",subtitle = "Periodo 1981-2025")
+
+
+plot_dec2 + geom_line(aes(y=dec1,colour="1981-1990"))  + geom_line(aes(y=dec2,colour="1991-2000"))+ geom_line(aes(y=dec3,colour="2001-2010"))+ geom_line(aes(y=dec4,colour="2011-2019"))+ 
+geom_line(aes(y=fut_PCP,colour="2021-2025"))+ scale_colour_manual("", values=c("1981-1990"="lightblue4", "1991-2000"="green4", "2001-2010"="orange", "2011-2019"="red","2021-2025"="purple"))+ scale_x_continuous(breaks=seq(0, 12, 1))
+
+```
+
+
+
+
+## series de tiempo
+
+```{r}
+
+PCP_1=ts(PCP_fut$enero,start = 2021,frequency = 1)
+PCP_2=ts(PCP_fut$febrero,start = 2021,frequency = 1)
+PCP_3=ts(PCP_fut$marzo,start = 2021,frequency = 1)
+PCP_4=ts(PCP_fut$abril,start = 2021,frequency = 1)
+PCP_5=ts(PCP_fut$mayo,start = 2021,frequency = 1)
+PCP_6=ts(PCP_fut$junio,start = 2021,frequency = 1)
+PCP_7=ts(PCP_fut$julio,start = 2021,frequency = 1)
+PCP_8=ts(PCP_fut$agosto,start = 2021,frequency = 1)
+PCP_9=ts(PCP_fut$septiembre,start = 2021,frequency = 1)
+PCP_10=ts(PCP_fut$octubre,start = 2021,frequency = 1)
+PCP_11=ts(PCP_fut$noviembre,start = 2021,frequency = 1)
+PCP_12=ts(PCP_fut$diciembre,start = 2021,frequency = 1)
+
+```
+## Graficos
+
+
+```{r}
+p_PCP_1=autoplot(PCP_1)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Enero",subtitle = "Periodo 2021-2025 Fase: Senescencia y Cosecha")+ geom_line(aes(y=PCP_1,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_2=autoplot(PCP_2)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Febrero",subtitle = "Periodo 2021-2025 Fase: Germinacion")+ geom_line(aes(y=PCP_2,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_3=autoplot(PCP_3)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Marzo",subtitle = "Periodo 2021-2025 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_3,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_4=autoplot(PCP_4)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Abril",subtitle = "Periodo 2021-2025 Fase: Llenado de tuberculo")+ geom_line(aes(y=PCP_4,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_5=autoplot(PCP_5)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Mayo",subtitle = "Periodo 2021-2025 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=PCP_5,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_6=autoplot(PCP_6)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Junio",subtitle = "Periodo 2021-2025 Fase: Senescencia")+ geom_line(aes(y=PCP_6,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_7=autoplot(PCP_7)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Julio",subtitle = "Periodo 2021-2025 Fase: Senescencia y Cosecha")+ geom_line(aes(y=PCP_7,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_8=autoplot(PCP_8)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Agosto",subtitle = "Periodo 2021-2025 Fase: Germinacion")+ geom_line(aes(y=PCP_8,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_9=autoplot(PCP_9)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Septiembre",subtitle = "Periodo 2021-2025 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_9,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_10=autoplot(PCP_10)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Octubre",subtitle = "Periodo 2021-2025 Fase: Llenado de tuberculo")+ geom_line(aes(y=PCP_10,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_11=autoplot(PCP_11)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Noviembre",subtitle = "Periodo 2021-2025 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=PCP_11,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_12=autoplot(PCP_12)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C2 - Cundinamarca del mes: Diciembre",subtitle = "Periodo 2021-2025 Fase: Senescencia")+ geom_line(aes(y=PCP_12,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+
+
+p_PCP_1
+p_PCP_2
+p_PCP_3
+p_PCP_4
+p_PCP_5
+p_PCP_6
+p_PCP_7
+p_PCP_8
+p_PCP_9
+p_PCP_10
+p_PCP_11
+p_PCP_12
+
+```
+
+
+
+
+
+
+
+
+

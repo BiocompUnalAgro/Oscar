@@ -1,0 +1,452 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+# graficos de TMED  y PCP por fenologia
+```{r}
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(ggfortify)
+tmedxmes<- read.csv("E:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/narino/C0/tmed_mes_C0_nar.csv")
+PCPxmes <- read.csv("E:/COSAS DE OSCAR DEFINITIVO/OSCAR/2020-2/Proyecto- PAPA/ANOMALIAS/ANOMALIAS POR CLUSTER/entrada pror departamento/narino/C0/PCP_mes_C0_nar.csv")
+año=c(1981:2020)
+meses=c("año","enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre")
+
+tmed_mes=data.frame(año,tmedxmes[,2:13])
+
+names(tmed_mes)=meses
+tmed_mes
+PCP_mes=data.frame(año,PCPxmes[,2:13])
+names(PCP_mes)=meses
+PCP_mes
+
+
+
+```
+## series de tiempo
+
+```{r}
+tmed_1=ts(tmed_mes$enero,start = 1981,frequency = 1)
+tmed_2=ts(tmed_mes$febrero,start = 1981,frequency = 1)
+tmed_3=ts(tmed_mes$marzo,start = 1981,frequency = 1)
+tmed_4=ts(tmed_mes$abril,start = 1981,frequency = 1)
+tmed_5=ts(tmed_mes$mayo,start = 1981,frequency = 1)
+tmed_6=ts(tmed_mes$junio,start = 1981,frequency = 1)
+tmed_7=ts(tmed_mes$julio,start = 1981,frequency = 1)
+tmed_8=ts(tmed_mes$agosto,start = 1981,frequency = 1)
+tmed_9=ts(tmed_mes$septiembre,start = 1981,frequency = 1)
+tmed_10=ts(tmed_mes$octubre,start = 1981,frequency = 1)
+tmed_11=ts(tmed_mes$noviembre,start = 1981,frequency = 1)
+tmed_12=ts(tmed_mes$diciembre,start = 1981,frequency = 1)
+
+PCP_1=ts(PCP_mes$enero,start = 1981,frequency = 1)
+PCP_2=ts(PCP_mes$febrero,start = 1981,frequency = 1)
+PCP_3=ts(PCP_mes$marzo,start = 1981,frequency = 1)
+PCP_4=ts(PCP_mes$abril,start = 1981,frequency = 1)
+PCP_5=ts(PCP_mes$mayo,start = 1981,frequency = 1)
+PCP_6=ts(PCP_mes$junio,start = 1981,frequency = 1)
+PCP_7=ts(PCP_mes$julio,start = 1981,frequency = 1)
+PCP_8=ts(PCP_mes$agosto,start = 1981,frequency = 1)
+PCP_9=ts(PCP_mes$septiembre,start = 1981,frequency = 1)
+PCP_10=ts(PCP_mes$octubre,start = 1981,frequency = 1)
+PCP_11=ts(PCP_mes$noviembre,start = 1981,frequency = 1)
+PCP_12=ts(PCP_mes$diciembre,start = 1981,frequency = 1)
+
+```
+## Graficos
+
+```{r}
+p_tmed_1=autoplot(tmed_1)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Enero",subtitle = "Periodo 1981-2020 Fase: Senescencia y Cosecha")+ geom_line(aes(y=tmed_1,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_2=autoplot(tmed_2)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Febrero",subtitle = "Periodo 1981-2020 Fase: Germinacion")+ geom_line(aes(y=tmed_2,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_3=autoplot(tmed_3)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Marzo",subtitle = "Periodo 1981-2020 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=tmed_3,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_4=autoplot(tmed_4)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Abril",subtitle = "Periodo 1981-2020 Fase: Llenado de tuberculo")+ geom_line(aes(y=tmed_4,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_5=autoplot(tmed_5)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Mayo",subtitle = "Periodo 1981-2020 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=tmed_5,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_6=autoplot(tmed_6)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Junio",subtitle = "Periodo 1981-2020 Fase: Senescencia")+ geom_line(aes(y=tmed_6,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_7=autoplot(tmed_7)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Julio",subtitle = "Periodo 1981-2020 Fase: Senescencia y Cosecha")+ geom_line(aes(y=tmed_7,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_8=autoplot(tmed_8)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Agosto",subtitle = "Periodo 1981-2020 Fase: Germinacion")+ geom_line(aes(y=tmed_8,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_9=autoplot(tmed_9)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Septiembre",subtitle = "Periodo 1981-2020 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=tmed_9,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_10=autoplot(tmed_10)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Octubre",subtitle = "Periodo 1981-2020 Fase: Llenado de tuberculo")+ geom_line(aes(y=tmed_10,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_11=autoplot(tmed_11)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Noviembre",subtitle = "Periodo 1981-2020 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=tmed_11,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_12=autoplot(tmed_12)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Diciembre",subtitle = "Periodo 1981-2020 Fase: Senescencia")+ geom_line(aes(y=tmed_12,colour="T. media °C"))  + geom_line(aes(y=10,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+
+
+p_tmed_1
+p_tmed_2
+p_tmed_3
+p_tmed_4
+p_tmed_5
+p_tmed_6
+p_tmed_7
+p_tmed_8
+p_tmed_9
+p_tmed_10
+p_tmed_11
+p_tmed_12
+
+```
+```{r}
+p_PCP_1=autoplot(PCP_1)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Enero",subtitle = "Periodo 1981-2019 Fase: Senescencia y Cosecha")+ geom_line(aes(y=PCP_1,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_2=autoplot(PCP_2)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Febrero",subtitle = "Periodo 1981-2019 Fase: Germinacion")+ geom_line(aes(y=PCP_2,colour="PCP (mm)"))  + geom_line(aes(y=40,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_3=autoplot(PCP_3)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Marzo",subtitle = "Periodo 1981-2019 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_3,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_4=autoplot(PCP_4)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Abril",subtitle = "Periodo 1981-2019 Fase: Llenado de tuberculo")+ geom_line(aes(y=PCP_4,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_5=autoplot(PCP_5)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Mayo",subtitle = "Periodo 1981-2019 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=PCP_5,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_6=autoplot(PCP_6)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Junio",subtitle = "Periodo 1981-2019 Fase: Senescencia")+ geom_line(aes(y=PCP_6,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_7=autoplot(PCP_7)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Julio",subtitle = "Periodo 1981-2019 Fase: Senescencia y Cosecha")+ geom_line(aes(y=PCP_7,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_8=autoplot(PCP_8)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Agosto",subtitle = "Periodo 1981-2019 Fase: Germinacion")+ geom_line(aes(y=PCP_8,colour="PCP (mm)"))  + geom_line(aes(y=40,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_9=autoplot(PCP_9)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Septiembre",subtitle = "Periodo 1981-2019 Fase: Crec. Vegetativo, Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_9,colour="PCP (mm)"))  + geom_line(aes(y=60,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_10=autoplot(PCP_10)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Octubre",subtitle = "Periodo 1981-2019 Fase: Llenado de tuberculo")+ geom_line(aes(y=PCP_10,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_11=autoplot(PCP_11)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Noviembre",subtitle = "Periodo 1981-2019 Fase: Llenado de tuberculo y Senescencia")+ geom_line(aes(y=PCP_11,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_12=autoplot(PCP_12)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Diciembre",subtitle = "Periodo 1981-2019 Fase: Senescencia")+ geom_line(aes(y=PCP_12,colour="PCP (mm)"))  + geom_line(aes(y=50,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+
+
+p_PCP_1
+p_PCP_2
+p_PCP_3
+p_PCP_4
+p_PCP_5
+p_PCP_6
+p_PCP_7
+p_PCP_8
+p_PCP_9
+p_PCP_10
+p_PCP_11
+p_PCP_12
+
+```
+
+# pronostico por mes
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(ggfortify)
+library(forecast)
+
+arima_tmed_1<-auto.arima(tmed_1)
+arima_tmed_2<-auto.arima(tmed_2)
+arima_tmed_3<-auto.arima(tmed_3)
+arima_tmed_4<-auto.arima(tmed_4)
+arima_tmed_5<-auto.arima(tmed_5)
+arima_tmed_6<-auto.arima(tmed_6)
+arima_tmed_7<-auto.arima(tmed_7)
+arima_tmed_8<-auto.arima(tmed_8)
+arima_tmed_9<-auto.arima(tmed_9)
+arima_tmed_10<-auto.arima(tmed_10)
+arima_tmed_11<-auto.arima(tmed_11)
+arima_tmed_12<-auto.arima(tmed_12)
+forecast_tmed_1<-forecast(arima_tmed_1,level = c(95), h = 5)
+forecast_tmed_2<-forecast(arima_tmed_2,level = c(95), h = 5)
+forecast_tmed_3<-forecast(arima_tmed_3,level = c(95), h = 5)
+forecast_tmed_4<-forecast(arima_tmed_4,level = c(95), h = 5)
+forecast_tmed_5<-forecast(arima_tmed_5,level = c(95), h = 5)
+forecast_tmed_6<-forecast(arima_tmed_6,level = c(95), h = 5)
+forecast_tmed_7<-forecast(arima_tmed_7,level = c(95), h = 5)
+forecast_tmed_8<-forecast(arima_tmed_8,level = c(95), h = 5)
+forecast_tmed_9<-forecast(arima_tmed_9,level = c(95), h = 5)
+forecast_tmed_10<-forecast(arima_tmed_10,level = c(95), h = 5)
+forecast_tmed_11<-forecast(arima_tmed_11,level = c(95), h = 5)
+forecast_tmed_12<-forecast(arima_tmed_12,level = c(95), h = 5)
+
+arima_PCP_1<-auto.arima(PCP_1)
+arima_PCP_2<-auto.arima(PCP_2)
+arima_PCP_3<-auto.arima(PCP_3)
+arima_PCP_4<-auto.arima(PCP_4)
+arima_PCP_5<-auto.arima(PCP_5)
+arima_PCP_6<-auto.arima(PCP_6)
+arima_PCP_7<-auto.arima(PCP_7)
+arima_PCP_8<-auto.arima(PCP_8)
+arima_PCP_9<-auto.arima(PCP_9)
+arima_PCP_10<-auto.arima(PCP_10)
+arima_PCP_11<-auto.arima(PCP_11)
+arima_PCP_12<-auto.arima(PCP_12)
+forecast_PCP_1<-forecast(arima_PCP_1,level = c(95), h = 5)
+forecast_PCP_2<-forecast(arima_PCP_2,level = c(95), h = 5)
+forecast_PCP_3<-forecast(arima_PCP_3,level = c(95), h = 5)
+forecast_PCP_4<-forecast(arima_PCP_4,level = c(95), h = 5)
+forecast_PCP_5<-forecast(arima_PCP_5,level = c(95), h = 5)
+forecast_PCP_6<-forecast(arima_PCP_6,level = c(95), h = 5)
+forecast_PCP_7<-forecast(arima_PCP_7,level = c(95), h = 5)
+forecast_PCP_8<-forecast(arima_PCP_8,level = c(95), h = 5)
+forecast_PCP_9<-forecast(arima_PCP_9,level = c(95), h = 5)
+forecast_PCP_10<-forecast(arima_PCP_10,level = c(95), h = 5)
+forecast_PCP_11<-forecast(arima_PCP_11,level = c(95), h = 5)
+forecast_PCP_12<-forecast(arima_PCP_12,level = c(95), h = 5)
+
+año=c(2021:2025)
+meses=c("año","enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre")
+enero=data.frame(forecast_tmed_1$mean)
+febrero=data.frame(forecast_tmed_2$mean)
+marzo=data.frame(forecast_tmed_3$mean)
+abril=data.frame(forecast_tmed_4$mean)
+mayo=data.frame(forecast_tmed_5$mean)
+junio=data.frame(forecast_tmed_6$mean)
+julio=data.frame(forecast_tmed_7$mean)
+agosto=data.frame(forecast_tmed_8$mean)
+septiembre=data.frame(forecast_tmed_9$mean)
+octubre=data.frame(forecast_tmed_10$mean)
+noviembre=data.frame(forecast_tmed_11$mean)
+diciembre=data.frame(forecast_tmed_12$mean)
+tmed_fut=data.frame(año,enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre)
+names(tmed_fut)=meses
+tmed_fut
+
+enero=data.frame(forecast_PCP_1$mean)
+febrero=data.frame(forecast_PCP_2$mean)
+marzo=data.frame(forecast_PCP_3$mean)
+abril=data.frame(forecast_PCP_4$mean)
+mayo=data.frame(forecast_PCP_5$mean)
+junio=data.frame(forecast_PCP_6$mean)
+julio=data.frame(forecast_PCP_7$mean)
+agosto=data.frame(forecast_PCP_8$mean)
+septiembre=data.frame(forecast_PCP_9$mean)
+octubre=data.frame(forecast_PCP_10$mean)
+noviembre=data.frame(forecast_PCP_11$mean)
+diciembre=data.frame(forecast_PCP_12$mean)
+PCP_fut=data.frame(año,enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre)
+names(PCP_fut)=meses
+PCP_fut
+
+write.csv(tmed_fut,"tmed_fut_mes_C1_nar.csv")
+write.csv(PCP_fut,"PCP_fut__mes_C1_nar.csv")
+```
+
+Graficos
+
+
+```{r}
+p_forecast_tmed_1=autoplot(forecast_tmed_1)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Enero",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_2=autoplot(forecast_tmed_2)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Febrero",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_3=autoplot(forecast_tmed_3)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Marzo",subtitle = "Periodo 1981-2020 y 2021-2025")
+p_forecast_tmed_4=autoplot(forecast_tmed_4)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Abril",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_5=autoplot(forecast_tmed_5)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Mayo",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_6=autoplot(forecast_tmed_6)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Junio",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_7=autoplot(forecast_tmed_7)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Julio",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_8=autoplot(forecast_tmed_8)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Agosto",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_9=autoplot(forecast_tmed_9)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Septiembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_10=autoplot(forecast_tmed_10)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Octubre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_11=autoplot(forecast_tmed_11)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Noviembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_tmed_12=autoplot(forecast_tmed_12)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Temperatura media C1 - Nariño del mes: Diciembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+
+
+p_forecast_tmed_1
+p_forecast_tmed_2
+p_forecast_tmed_3
+p_forecast_tmed_4
+p_forecast_tmed_5
+p_forecast_tmed_6
+p_forecast_tmed_7
+p_forecast_tmed_8
+p_forecast_tmed_9
+p_forecast_tmed_10
+p_forecast_tmed_11
+p_forecast_tmed_12
+
+```
+```{r}
+p_forecast_PCP_1=autoplot(forecast_PCP_1)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Enero",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_2=autoplot(forecast_PCP_2)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Febrero",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_3=autoplot(forecast_PCP_3)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Marzo",subtitle = "Periodo 1981-2020 y 2021-2025")
+p_forecast_PCP_4=autoplot(forecast_PCP_4)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Abril",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_5=autoplot(forecast_PCP_5)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Mayo",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_6=autoplot(forecast_PCP_6)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Junio",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_7=autoplot(forecast_PCP_7)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Julio",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_8=autoplot(forecast_PCP_8)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Agosto",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_9=autoplot(forecast_PCP_9)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Septiembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_10=autoplot(forecast_PCP_10)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Octubre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_11=autoplot(forecast_PCP_11)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Noviembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+p_forecast_PCP_12=autoplot(forecast_PCP_12)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Precipitacion C1 - Nariño del mes: Diciembre",subtitle = "Periodo 1981-2020 y 2021-2025")
+
+
+
+p_forecast_PCP_1
+p_forecast_PCP_2
+p_forecast_PCP_3
+p_forecast_PCP_4
+p_forecast_PCP_5
+p_forecast_PCP_6
+p_forecast_PCP_7
+p_forecast_PCP_8
+p_forecast_PCP_9
+p_forecast_PCP_10
+p_forecast_PCP_11
+p_forecast_PCP_12
+
+```
+
+## series de tiempo
+
+```{r}
+tmed_1=ts(tmed_fut$enero,start = 2021,frequency = 1)
+tmed_2=ts(tmed_fut$febrero,start = 2021,frequency = 1)
+tmed_3=ts(tmed_fut$marzo,start = 2021,frequency = 1)
+tmed_4=ts(tmed_fut$abril,start = 2021,frequency = 1)
+tmed_5=ts(tmed_fut$mayo,start = 2021,frequency = 1)
+tmed_6=ts(tmed_fut$junio,start = 2021,frequency = 1)
+tmed_7=ts(tmed_fut$julio,start = 2021,frequency = 1)
+tmed_8=ts(tmed_fut$agosto,start = 2021,frequency = 1)
+tmed_9=ts(tmed_fut$septiembre,start = 2021,frequency = 1)
+tmed_10=ts(tmed_fut$octubre,start = 2021,frequency = 1)
+tmed_11=ts(tmed_fut$noviembre,start = 2021,frequency = 1)
+tmed_12=ts(tmed_fut$diciembre,start = 2021,frequency = 1)
+
+PCP_1=ts(PCP_fut$enero,start = 2021,frequency = 1)
+PCP_2=ts(PCP_fut$febrero,start = 2021,frequency = 1)
+PCP_3=ts(PCP_fut$marzo,start = 2021,frequency = 1)
+PCP_4=ts(PCP_fut$abril,start = 2021,frequency = 1)
+PCP_5=ts(PCP_fut$mayo,start = 2021,frequency = 1)
+PCP_6=ts(PCP_fut$junio,start = 2021,frequency = 1)
+PCP_7=ts(PCP_fut$julio,start = 2021,frequency = 1)
+PCP_8=ts(PCP_fut$agosto,start = 2021,frequency = 1)
+PCP_9=ts(PCP_fut$septiembre,start = 2021,frequency = 1)
+PCP_10=ts(PCP_fut$octubre,start = 2021,frequency = 1)
+PCP_11=ts(PCP_fut$noviembre,start = 2021,frequency = 1)
+PCP_12=ts(PCP_fut$diciembre,start = 2021,frequency = 1)
+
+```
+## Graficos
+
+```{r}
+p_tmed_1=autoplot(tmed_1)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Enero",subtitle = "Periodo 2021-2025 Etapa: Germinacion")+ geom_line(aes(y=tmed_1,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_2=autoplot(tmed_2)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Febrero",subtitle = "Periodo 2021-2025 Etapa: Crec. Vegetativo e Ini. Tuberizacion")+ geom_line(aes(y=tmed_2,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_3=autoplot(tmed_3)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Marzo",subtitle = "Periodo 2021-2025 Etapa: Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=tmed_3,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_4=autoplot(tmed_4)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Abril",subtitle = "Periodo 2021-2025 Etapa: Llenado de tuberculo")+ geom_line(aes(y=tmed_4,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_5=autoplot(tmed_5)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Mayo",subtitle = "Periodo 2021-2025 Etapa: Senescencia")+ geom_line(aes(y=tmed_5,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_6=autoplot(tmed_6)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Junio",subtitle = "Periodo 2021-2025 Etapa: Senescencia y Cosecha")+ geom_line(aes(y=tmed_6,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_7=autoplot(tmed_7)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Julio",subtitle = "Periodo 2021-2025 Etapa: Germinacion")+ geom_line(aes(y=tmed_7,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_8=autoplot(tmed_8)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Agosto",subtitle = "Periodo 2021-2025 Etapa: Crec. Vegetativo e Ini. Tuberizacion")+ geom_line(aes(y=tmed_8,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_9=autoplot(tmed_9)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Septiembre",subtitle = "Periodo 2021-2025 Etapa: Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=tmed_9,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_10=autoplot(tmed_10)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Octubre",subtitle = "Periodo 2021-2025 Etapa: Llenado de tuberculo")+ geom_line(aes(y=tmed_10,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_11=autoplot(tmed_11)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Noviembre",subtitle = "Periodo 2021-2025 Etapa: Senescencia")+ geom_line(aes(y=tmed_11,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+p_tmed_12=autoplot(tmed_12)+xlab("Año")+ylab("Temperatura media [°C]")+ggtitle("Pronostico de Temperatura media C1 - Nariño del mes: Diciembre",subtitle = "Periodo 2021-2025 Etapa: Senescencia y Cosecha")+ geom_line(aes(y=tmed_12,colour="T. media °C"))  + geom_line(aes(y=16,colour="T. limite °C"))+ scale_colour_manual("", values=c("T. media °C"="black", "T. limite °C"="red"))
+
+
+
+p_tmed_1
+p_tmed_2
+p_tmed_3
+p_tmed_4
+p_tmed_5
+p_tmed_6
+p_tmed_7
+p_tmed_8
+p_tmed_9
+p_tmed_10
+p_tmed_11
+p_tmed_12
+
+```
+```{r}
+p_PCP_1=autoplot(PCP_1)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Enero",subtitle = "Periodo 2021-2025 Etapa: Germinacion")+ geom_line(aes(y=PCP_1,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_2=autoplot(PCP_2)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Febrero",subtitle = "Periodo 2021-2025 Etapa: Crec. Vegetativo e Ini. Tuberizacion")+ geom_line(aes(y=PCP_2,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_3=autoplot(PCP_3)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Marzo",subtitle = "Periodo 2021-2025 Etapa: Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_3,colour="PCP (mm)"))  + geom_line(aes(y=150,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_4=autoplot(PCP_4)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Abril",subtitle = "Periodo 2021-2025  Etapa: Llenado de tuberculo")+ geom_line(aes(y=PCP_4,colour="PCP (mm)"))  + geom_line(aes(y=150,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_5=autoplot(PCP_5)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Mayo",subtitle = "Periodo 2021-2025 Etapa: Senescencia")+ geom_line(aes(y=PCP_5,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_6=autoplot(PCP_6)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Junio",subtitle = "Periodo 2021-2025 Etapa: Senescencia y Cosecha")+ geom_line(aes(y=PCP_6,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_7=autoplot(PCP_7)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Julio",subtitle = "Periodo 2021-2025 Etapa: Germinacion")+ geom_line(aes(y=PCP_7,colour="PCP (mm)"))  + geom_line(aes(y=75,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_8=autoplot(PCP_8)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Agosto",subtitle = "Periodo 2021-2025 Etapa: Crec. Vegetativo e Ini. Tuberizacion")+ geom_line(aes(y=PCP_8,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_9=autoplot(PCP_9)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Septiembre",subtitle = "Periodo 2021-2025 Etapa: Ini. Tuberizacion y Llenado de tuberculo")+ geom_line(aes(y=PCP_9,colour="PCP (mm)"))  + geom_line(aes(y=150,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_10=autoplot(PCP_10)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Octubre",subtitle = "Periodo 2021-2025 Etapa: Llenado de tuberculo")+ geom_line(aes(y=PCP_10,colour="PCP (mm)"))  + geom_line(aes(y=150,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_11=autoplot(PCP_11)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Noviembre",subtitle = "Periodo 2021-2025 Etapa: Senescencia")+ geom_line(aes(y=PCP_11,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+p_PCP_12=autoplot(PCP_12)+xlab("Año")+ylab("Precipitacion [mm]")+ggtitle("Pronostico de precipitacion C1 - Nariño del mes: Diciembre",subtitle = "Periodo 2021-2025 Etapa: Senescencia y Cosecha")+ geom_line(aes(y=PCP_12,colour="PCP (mm)"))  + geom_line(aes(y=100,colour="Req. PCP (mm)"))+ scale_colour_manual("", values=c("PCP (mm)"="black", "Req. PCP (mm)"="red"))
+
+
+
+p_PCP_1
+p_PCP_2
+p_PCP_3
+p_PCP_4
+p_PCP_5
+p_PCP_6
+p_PCP_7
+p_PCP_8
+p_PCP_9
+p_PCP_10
+p_PCP_11
+p_PCP_12
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
